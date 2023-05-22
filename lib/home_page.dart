@@ -1,3 +1,4 @@
+import 'package:akary/auth_services.dart';
 import 'package:akary/signup_page.dart';
 import 'package:akary/login_page.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +13,32 @@ class homepage extends StatefulWidget {
 class _homepageState extends State<homepage> {
   List<String> _dataList = [];
   List<String> _searchResult = [];
+  String? name;
+  String? email;
+  bool _isLoading = true;
 
   TextEditingController _searchController = TextEditingController();
+
+  getUserName() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final getReturns = await AuthServices.getUser();
+    if (getReturns[0] != "success") {
+      return;
+    }
+    setState(() {
+      _isLoading = false;
+      name = getReturns[1];
+      email = getReturns[2];
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserName();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,64 +57,68 @@ class _homepageState extends State<homepage> {
           backgroundColor: Color.fromARGB(255, 15, 127, 101)),
       drawer: Drawer(
         backgroundColor: Colors.white,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              decoration:
-                  BoxDecoration(color: Color.fromARGB(255, 15, 127, 101)),
-              accountName: Text('Mathew paul'),
-              accountEmail: Text('matts@example.com'),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Text(
-                  'MP',
-                  style: TextStyle(
-                    fontSize: 40.0,
-                    color: Colors.black,
+        child: _isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : ListView(
+                padding: EdgeInsets.zero,
+                children: <Widget>[
+                  UserAccountsDrawerHeader(
+                    decoration:
+                        BoxDecoration(color: Color.fromARGB(255, 15, 127, 101)),
+                    accountName: Text(name!),
+                    accountEmail: Text(email!),
+                    currentAccountPicture: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: Text(
+                        name![0] + name![name!.indexOf(' ') + 1],
+                        style: TextStyle(
+                          fontSize: 40.0,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  ListTile(
+                    leading: Icon(Icons.home),
+                    title: Text('Home'),
+                    onTap: () {
+                      // TODO: NavigNavigator.pop(context); // close the drawer
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => homepage()),
+                      );
+                    },
+                  ),
+                  // ListTile(
+                  //     leading: Icon(Icons.person),
+                  //     title: Text('Profile'),
+                  //     onTap: () {
+                  //       Navigator.push;
+                  //       {
+                  //         // TODO: Logout tNavigator.pop(context); // close the drawer
+                  //         // Navigator.push(
+                  //         //   context,
+                  //         //   MaterialPageRoute(builder: (context) => LoginScreen()),
+                  //         // );
+                  //       }
+                  //       ;
+                  //     }),
+                  Divider(),
+                  ListTile(
+                    leading: Icon(Icons.exit_to_app),
+                    title: Text('Logout'),
+                    onTap: () {
+                      // TODO: Logout tNavigator.pop(context); // close the drawer
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Loginpage()),
+                      );
+                    },
+                  ),
+                ],
               ),
-            ),
-            ListTile(
-              leading: Icon(Icons.home),
-              title: Text('Home'),
-              onTap: () {
-                // TODO: NavigNavigator.pop(context); // close the drawer
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => homepage()),
-                );
-              },
-            ),
-            // ListTile(
-            //     leading: Icon(Icons.person),
-            //     title: Text('Profile'),
-            //     onTap: () {
-            //       Navigator.push;
-            //       {
-            //         // TODO: Logout tNavigator.pop(context); // close the drawer
-            //         // Navigator.push(
-            //         //   context,
-            //         //   MaterialPageRoute(builder: (context) => LoginScreen()),
-            //         // );
-            //       }
-            //       ;
-            //     }),
-            Divider(),
-            ListTile(
-              leading: Icon(Icons.exit_to_app),
-              title: Text('Logout'),
-              onTap: () {
-                // TODO: Logout tNavigator.pop(context); // close the drawer
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Loginpage()),
-                );
-              },
-            ),
-          ],
-        ),
       ),
       body: _searchResult.length != 0 || _searchController.text.isNotEmpty
           ? ListView.builder(

@@ -101,6 +101,7 @@ class _LoginpageState extends State<Loginpage> {
                           height: 25,
                         ),
                         TextField(
+                          obscureText: true,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(50)),

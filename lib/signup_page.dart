@@ -8,6 +8,7 @@ import 'home_page.dart';
 
 class SignUp extends StatelessWidget {
   SignUp({super.key});
+  final _nameController = TextEditingController();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -15,12 +16,15 @@ class SignUp extends StatelessWidget {
   void dispose() {
     _usernameController.dispose();
     _passwordController.dispose();
+    _nameController.dispose();
   }
 
   _loginUser() async {
     String email = _usernameController.text.trim();
     String password = _passwordController.text.trim();
-    String res = await AuthServices.signup(email: email, password: password);
+    String name = _nameController.text.trim();
+    String res =
+        await AuthServices.signup(email: email, password: password, name: name);
 
     if (res != "success") {
       print(res);
@@ -74,10 +78,22 @@ class SignUp extends StatelessWidget {
                                 filled: true,
                                 fillColor:
                                     const Color.fromARGB(255, 153, 146, 134),
-                                hintText: 'first name',
+                                hintText: 'Name',
                               ),
+                              controller: _nameController,
                             ),
                             const SizedBox(height: 20),
+                            // TextField(
+                            //   decoration: InputDecoration(
+                            //     border: OutlineInputBorder(
+                            //         borderRadius: BorderRadius.circular(50)),
+                            //     filled: true,
+                            //     fillColor:
+                            //         const Color.fromARGB(255, 153, 146, 134),
+                            //     hintText: 'last name',
+                            //   ),
+                            // ),
+                            // const SizedBox(height: 20),
                             TextField(
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
@@ -85,18 +101,7 @@ class SignUp extends StatelessWidget {
                                 filled: true,
                                 fillColor:
                                     const Color.fromARGB(255, 153, 146, 134),
-                                hintText: 'last name',
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            TextField(
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(50)),
-                                filled: true,
-                                fillColor:
-                                    const Color.fromARGB(255, 153, 146, 134),
-                                hintText: 'User_name',
+                                hintText: 'Email',
                               ),
                               controller: _usernameController,
                             ),
@@ -108,8 +113,9 @@ class SignUp extends StatelessWidget {
                                 filled: true,
                                 fillColor:
                                     const Color.fromARGB(255, 153, 146, 134),
-                                hintText: 'password',
+                                hintText: 'Password',
                               ),
+                              obscureText: true,
                               controller: _passwordController,
                             ),
                             const SizedBox(height: 43),
