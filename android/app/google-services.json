@@ -33,6 +33,35 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1042983353742:android:3948f7dfb9e310612fb8df",
+        "android_client_info": {
+          "package_name": "com.example.akary.firebase_setup"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1042983353742-g4f1abl0p23ngepcuk8fp24nc3ushc4j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZejGnma-8HAJmx67nyiF-iOwJRMCpU9g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1042983353742-g4f1abl0p23ngepcuk8fp24nc3ushc4j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
