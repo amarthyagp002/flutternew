@@ -1,9 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:async';
+import 'selection.dart';
 
 import 'package:flutter/material.dart';
-import 'package:akary/selection_page.dart';
+//import 'package:akary/selection_page.dart';
 
 class splashscreen extends StatefulWidget {
   const splashscreen({super.key});
@@ -27,9 +28,9 @@ class _splashscreenState extends State<splashscreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       body: const Center(
-          child: Image(image: AssetImage('assets/splash_screen_logo.png'))),
+          child: Image(image: AssetImage('assets/splashscreen_logo.png'))),
     );
     ;
   }

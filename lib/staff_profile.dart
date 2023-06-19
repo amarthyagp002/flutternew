@@ -1,4 +1,5 @@
 import 'package:akary/home_page.dart';
+import 'package:akary/staff_home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -57,7 +58,7 @@ class _StaffProfileState extends State<StaffProfile> {
             ElevatedButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => homepage()));
+                    MaterialPageRoute(builder: (context) => StaffHomePage()));
               },
               child: Text('SUBMIT'),
               style: ElevatedButton.styleFrom(

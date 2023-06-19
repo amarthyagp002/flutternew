@@ -23,17 +23,17 @@ class _SelectionScreenState extends State<SelectionScreen> {
         left: 0,
         child: Container(
           height: 300,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage('assets/car-recycle-b.png'),
                   fit: BoxFit.fill)),
           child: Container(
-              color: Color.fromARGB(243, 173, 50, 50).withOpacity(.85),
+              color: const Color.fromARGB(243, 173, 50, 50).withOpacity(.85),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'Hello,',
                     maxLines: 3,
                     textAlign: TextAlign.left,
@@ -44,7 +44,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
                       color: Color.fromARGB(179, 0, 0, 0),
                     ),
                   ),
-                  Text(
+                  const Text(
                     'welcome',
                     maxLines: 3,
                     textAlign: TextAlign.left,
@@ -55,7 +55,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
                       color: Color.fromARGB(179, 255, 255, 255),
                     ),
                   ),
-                  Text(
+                  const Text(
                     'back!',
                     maxLines: 3,
                     textAlign: TextAlign.left,
@@ -76,7 +76,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
           right: 0,
           child: Container(
             height: 470,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 color: Colors.black,
                 borderRadius: BorderRadius.only(
                     topRight: Radius.circular(40),
@@ -84,10 +84,10 @@ class _SelectionScreenState extends State<SelectionScreen> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 50,
                   ),
-                  Text(
+                  const Text(
                     'CONTINUE AS',
                     maxLines: 3,
                     textAlign: TextAlign.center,
@@ -98,7 +98,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
                       color: Color.fromARGB(179, 226, 204, 204),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 40,
                   ),
                   ElevatedButton(
@@ -107,9 +107,9 @@ class _SelectionScreenState extends State<SelectionScreen> {
                           MaterialPageRoute(builder: (context) => SignUp()));
                       style:
                       ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 255, 43, 43));
+                          backgroundColor: const Color.fromARGB(255, 255, 43, 43));
                     },
-                    child: Text(
+                    child: const Text(
                       "STAFF",
                       style: TextStyle(fontSize: 20),
                     ),
@@ -120,9 +120,9 @@ class _SelectionScreenState extends State<SelectionScreen> {
                           MaterialPageRoute(builder: (context) => SignUp()));
                       style:
                       ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 247, 111, 73));
+                          backgroundColor: const Color.fromARGB(255, 247, 111, 73));
                     },
-                    child: Text(
+                    child: const Text(
                       "CUSTOMER",
                       style: TextStyle(fontSize: 20),
                     ),
@@ -133,9 +133,9 @@ class _SelectionScreenState extends State<SelectionScreen> {
                           MaterialPageRoute(builder: (context) => SignUp()));
                       style:
                       ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 242, 71, 71));
+                          backgroundColor: const Color.fromARGB(255, 242, 71, 71));
                     },
-                    child: Text(
+                    child: const Text(
                       "GUEST",
                       style: TextStyle(fontSize: 20),
                     ),

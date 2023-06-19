@@ -1,6 +1,8 @@
 import 'package:akary/auth_services.dart';
+import 'package:akary/bottomnav.dart';
 import 'package:akary/home_page.dart';
-import 'package:akary/splash_screen.dart';
+//import 'package:akary/front_end_o/splash_screen.dart';
+import 'package:akary/staff_profile.dart';
 import 'package:flutter/material.dart';
 import 'signup_page.dart';
 import 'package:get/get.dart';
@@ -29,9 +31,9 @@ class _LoginpageState extends State<Loginpage> {
   _loginUser() async {
     String email = _usernameController.text.trim();
     String password = _passwordController.text.trim();
-    String res = await AuthServices.login(email: email, password: password);
+    final role = await AuthServices.login(email: email, password: password);
 
-    if (res != "success") {
+    if (role != "USER"&&role!="STAFF") {
       Fluttertoast.showToast(
           msg: "Password is incorrect",
           toastLength: Toast.LENGTH_SHORT,
@@ -41,8 +43,38 @@ class _LoginpageState extends State<Loginpage> {
           fontSize: 16.0);
     } else {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => homepage()));
+          context, MaterialPageRoute(builder: (context) => Bottomnav()));
     }
+    // if (role != "USER"&&role!="STAFF") {
+    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    //     content: Text(
+    //       'Invalid Username or Password',
+    //       //style: GoogleFonts.raleway(fontSize: 15, fontWeight: FontWeight.w600),
+    //     ),
+    //     backgroundColor: Colors.red,
+    //     duration: const Duration(seconds: 3),
+    //   ));
+    //   return;
+    // }
+      Widget? page;
+      switch(role.toUpperCase())
+      {
+        
+        case 'USER':
+        page= Bottomnav();
+        break;
+        case 'STAFF':
+        page= const StaffProfile();
+        break;
+        default:
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(role)));
+
+      }
+      if(page!=null)
+      {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx2)=>page!));
+      }
   }
 
   @override

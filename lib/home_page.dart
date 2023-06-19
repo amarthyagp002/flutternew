@@ -1,11 +1,19 @@
+import 'dart:typed_data';
+
 import 'package:akary/User_Details_Page.dart';
 import 'package:akary/auth_services.dart';
 import 'package:akary/customer_profile.dart';
+import 'package:akary/cart1.dart';
+//import 'package:akary/front_end_o/description.dart';
 import 'package:akary/orders_Page.dart';
+import 'package:akary/search.dart';
+import 'package:akary/sell.dart';
+import 'package:akary/description.dart';
 
 import 'package:akary/settings_page.dart';
 import 'package:akary/signup_page.dart';
 import 'package:akary/login_page.dart';
+import 'package:akary/stock_update.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -47,6 +55,7 @@ class _homepageState extends State<homepage> {
     return ''; // or handle the case when the user is not authenticated
   }
 
+  getdetails() async {}
   getUserName() async {
     setState(() {
       _isLoading = true;
@@ -75,10 +84,62 @@ class _homepageState extends State<homepage> {
     );
   }
 
+  // _image({}) async {
+  //   DocumentSnapshot snap = await FirebaseFirestore.instance
+  //       .collection('staff')
+  //       .doc('ZORJDKCdPCgR23QIDx2DSEGWokG2').collection('item').where()
+  //       .get();
+  //   setState(() {
+  //     String image = (snap.data() as Map<String, dynamic>)['image'];
+
+  //   });
+
+  move(String name) async {
+    print(name);
+    // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+    //     .collection('staff')
+    //     .doc(FirebaseAuth.instance.currentUser!.uid)
+    //     .collection('items')
+    //     .get();
+    final query = await FirebaseFirestore.instance
+        .collection('staff')
+        .doc('ZORJDKCdPCgR23QIDx2DSEGWokG2')
+        .collection('items')
+        .where('part-name', isEqualTo: name)
+        .get();
+    print(query.docs[0].id);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (ctx) => Descriptionscreen(id: query.docs[0].id)));
+    // for (var document in querySnapshot.docs) {
+
+    // }
+  }
+
+  List screens = [HomePage(), SellPage(), Cart()];
+  int selectedindex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: IconButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (ctx) => const SearchPage()));
+                },
+                icon: Icon(Icons.search_rounded)),
+          )
+        ],
+        // leading: IconButton(
+        //     onPressed: () {
+        //       Navigator.push(context,
+        //           MaterialPageRoute(builder: (ctx) => const SearchPage()));
+        //     },
+        //     icon: Icon(Icons.search_rounded)),
         shadowColor: Colors.white,
         foregroundColor: Colors.white,
         title: TextField(
@@ -92,7 +153,7 @@ class _homepageState extends State<homepage> {
         backgroundColor: Color.fromARGB(255, 0, 0, 0),
       ),
       drawer: Drawer(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.black54,
         child: _isLoading
             ? const Center(
                 child: CircularProgressIndicator(),
@@ -196,31 +257,197 @@ class _homepageState extends State<homepage> {
       ),
       body: Column(
         children: [
+          // Expanded(
+          //   child:
+          //       _searchResult.length != 0 || _searchController.text.isNotEmpty
+          //           ? ListView.builder(
+          //               itemCount: _searchResult.length,
+          //               itemBuilder: (context, index) {
+          //                 return ListTile(
+          //                   title: Text(_searchResult[index]),
+          //                 );
+          //               },
+          //             )
+          //           : ListView.builder(
+          //               itemCount: _dataList.length,
+          //               itemBuilder: (context, index) {
+          //                 return ListTile(
+          //                   title: Text(_dataList[index]),
+          //                 );
+          //               },
+          //             ),
+          // ),
           Expanded(
-            child:
-                _searchResult.length != 0 || _searchController.text.isNotEmpty
-                    ? ListView.builder(
-                        itemCount: _searchResult.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            title: Text(_searchResult[index]),
-                          );
+            child: FutureBuilder(
+              future: FirebaseFirestore.instance
+                  .collection('staff')
+                  .doc('ZORJDKCdPCgR23QIDx2DSEGWokG2')
+                  .collection('items')
+                  .get(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return ListView.builder(
+                  itemCount: (snapshot.data! as dynamic).docs.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        onTap: () async {
+                          move((snapshot.data! as dynamic).docs[index]
+                              ['part-name']);
                         },
-                      )
-                    : ListView.builder(
-                        itemCount: _dataList.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            title: Text(_dataList[index]),
-                          );
-                        },
+                        child: Stack(
+                          children: [
+                            Container(
+                                height: 300,
+                                width: double.infinity,
+                                child: Image.network(
+                                  (snapshot.data! as dynamic).docs[index]
+                                      ['image'],
+                                  fit: BoxFit.cover,
+                                )
+                                // decoration: BoxDecoration(
+                                //     image: DecorationImage(
+                                //         image: NetworkImage(
+                                //             (snapshot.data! as dynamic)
+                                //                 .docs[index]['image']))),
+                                ),
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(11),
+                                color: Colors.transparent,
+                              ),
+                              height: 300,
+                              child: Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height: 150,
+                                    ),
+                                    Text(
+                                      (snapshot.data! as dynamic).docs[index]
+                                          ['part-name'],
+                                      style: TextStyle(fontSize: 30),
+                                    ),
+                                    const SizedBox(height: 7),
+                                    Text(
+                                      (snapshot.data! as dynamic).docs[index]
+                                          ['company'],
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+
+                                    const SizedBox(height: 7),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          (snapshot.data! as dynamic)
+                                              .docs[index]['price'],
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.orange),
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.orange,
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          child: Icon(Icons.add),
+                                        ),
+                                      ],
+                                    ),
+                                    // Row(
+                                    //   children: [
+                                    //     const Icon(
+                                    //       Icons.person_rounded,
+                                    //       size: 40,
+                                    //     ),
+                                    //     const SizedBox(
+                                    //       width: 15,
+                                    //     ),
+                                    //     Text(
+                                    //       (snapshot.data! as dynamic).docs[index]
+                                    //           ['user-name'],
+                                    //       style: GoogleFonts.montserrat(
+                                    //           fontWeight: FontWeight.w600),
+                                    //     ),
+                                    //   ],
+                                    // ),
+                                    // const SizedBox(height: 7),
+                                    // Row(
+                                    //   mainAxisAlignment:
+                                    //       MainAxisAlignment.spaceBetween,
+                                    //   children: [
+                                    //     Padding(
+                                    //       padding: const EdgeInsets.only(left: 10.0),
+                                    //       child: Column(
+                                    //           crossAxisAlignment:
+                                    //               CrossAxisAlignment.start,
+                                    //           children: [
+                                    //             const Text('Service'),
+                                    //             Text(
+                                    //               (snapshot.data! as dynamic)
+                                    //                   .docs[index]['servicetype'],
+                                    //             ),
+                                    //           ]),
+                                    //     ),
+                                    //     const Text('Vehicle Name'),
+                                    //   ],
+                                    // ),
+                                    // Row(
+                                    //   children: [
+                                    //     IconButton(
+                                    //         onPressed: () {
+                                    //           confirmbooking();
+                                    //         },
+                                    //         icon: const Icon(Icons.check_circle)),
+                                    //     IconButton(
+                                    //         onPressed: () {
+                                    //              cancelbooking(
+                                    //               (snapshot.data! as dynamic)
+                                    //                   .docs[index]['user-name'],
+                                    //               (snapshot.data! as dynamic)
+                                    //                   .docs[index]['servicetype']);
+                                    //         },
+                                    //         icon: const Icon(Icons.cancel_rounded)),
+                                    //   ],
+                                    // )
+
+                                    // Text(
+                                    //   (snapshot.data! as dynamic).docs[index]
+                                    //       ['booked-date'],
+                                    // ),
+
+                                    // Text(
+                                    //   (snapshot.data! as dynamic).docs[index]['time'],
+                                    // ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
+                    );
+                  },
+                );
+              },
+            ),
           ),
           FloatingActionButton(
-            onPressed: sellButtonPressed,
-            child: Icon(Icons.add),
-            backgroundColor: Colors.black,
-          ),
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => SellPage()));
+            },
+            child: Icon(Icons.navigate_next),
+          )
         ],
       ),
     );
@@ -240,11 +467,11 @@ class _homepageState extends State<homepage> {
     setState(() {});
   }
 
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _searchController.dispose();
+  //   super.dispose();
+  // }
 }
 
 class UserBox extends StatelessWidget {
@@ -301,251 +528,6 @@ class UserBox extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class SellPage extends StatefulWidget {
-  @override
-  _SellPageState createState() => _SellPageState();
-}
-
-class _SellPageState extends State<SellPage> {
-  TextEditingController _modelNameController = TextEditingController();
-  TextEditingController _yearController = TextEditingController();
-  TextEditingController _transmissionController = TextEditingController();
-  TextEditingController _kilometersDrivenController = TextEditingController();
-  TextEditingController _numOfOwnersController = TextEditingController();
-  TextEditingController _descriptionController = TextEditingController();
-  TextEditingController _priceController =
-      TextEditingController(); // Add price controller
-
-  void goToNextPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AddImagePage(
-          modelNameController: _modelNameController,
-          yearController: _yearController,
-          transmissionController: _transmissionController,
-          kilometersDrivenController: _kilometersDrivenController,
-          numOfOwnersController: _numOfOwnersController,
-          descriptionController: _descriptionController,
-          priceController:
-              _priceController, // Pass price controller to AddImagePage
-        ),
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _modelNameController.dispose();
-    _yearController.dispose();
-    _transmissionController.dispose();
-    _kilometersDrivenController.dispose();
-    _numOfOwnersController.dispose();
-    _descriptionController.dispose();
-    _priceController.dispose(); // Dispose price controller
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Sell Your Car'),
-        backgroundColor: Colors.black,
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(5.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextField(
-                controller: _modelNameController,
-                decoration: InputDecoration(
-                  labelText: 'Model Name',
-                ),
-              ),
-              TextField(
-                controller: _yearController,
-                decoration: InputDecoration(
-                  labelText: 'Year',
-                ),
-              ),
-              TextField(
-                controller: _transmissionController,
-                decoration: InputDecoration(
-                  labelText: 'Transmission',
-                ),
-              ),
-              TextField(
-                controller: _kilometersDrivenController,
-                decoration: InputDecoration(
-                  labelText: "KM's Driven",
-                ),
-              ),
-              TextField(
-                controller: _numOfOwnersController,
-                decoration: InputDecoration(
-                  labelText: 'No. of Owners',
-                ),
-              ),
-              TextField(
-                controller: _descriptionController,
-                decoration: InputDecoration(
-                  labelText: 'Description',
-                ),
-              ),
-              TextField(
-                controller: _priceController, // Add TextField for price
-                decoration: InputDecoration(
-                  labelText: 'Price',
-                ),
-              ),
-              ElevatedButton(
-                onPressed: goToNextPage,
-                child: Text('Next'),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class AddImagePage extends StatefulWidget {
-  final TextEditingController modelNameController;
-  final TextEditingController yearController;
-  final TextEditingController transmissionController;
-  final TextEditingController kilometersDrivenController;
-  final TextEditingController numOfOwnersController;
-  final TextEditingController descriptionController;
-  final TextEditingController priceController; // Add price controller
-
-  const AddImagePage({
-    required this.modelNameController,
-    required this.yearController,
-    required this.transmissionController,
-    required this.kilometersDrivenController,
-    required this.numOfOwnersController,
-    required this.descriptionController,
-    required this.priceController, // Receive price controller
-  });
-
-  @override
-  _AddImagePageState createState() => _AddImagePageState();
-}
-
-class _AddImagePageState extends State<AddImagePage> {
-  File? _selectedImage;
-
-  Future<void> _selectImage() async {
-    final picker = ImagePicker();
-    final pickedImage = await picker.getImage(source: ImageSource.gallery);
-
-    if (pickedImage != null) {
-      setState(() {
-        _selectedImage = File(pickedImage.path);
-      });
-    }
-  }
-
-  void _submitImage() {
-    if (_selectedImage != null) {
-      // Upload the image to Firebase Storage (optional)
-      // ...
-
-      // Store the image details in the Firebase database
-      FirebaseFirestore.instance.collection('images').add({
-        'path': _selectedImage!.path,
-        // Add more fields as needed (e.g., image URL, timestamp, etc.)
-      }).then((value) {
-        print('Image details stored successfully');
-
-        // Access the user details passed from SellPage
-        var modelName = widget.modelNameController.text;
-        var year = widget.yearController.text;
-        var transmission = widget.transmissionController.text;
-        var kilometersDriven = widget.kilometersDrivenController.text;
-        var numOfOwners = widget.numOfOwnersController.text;
-        var description = widget.descriptionController.text;
-        var price = widget.priceController.text; // Get price value
-
-        // Store additional details from SellPage in a separate collection
-        FirebaseFirestore.instance.collection('sellDetails').add({
-          'modelName': modelName,
-          'year': year,
-          'transmission': transmission,
-          'kilometersDriven': kilometersDriven,
-          'numOfOwners': numOfOwners,
-          'description': description,
-          'price': price, // Store price value
-          // Add more fields as needed
-        }).then((value) {
-          print('Sell details stored successfully');
-
-          // Navigate to the homepage and remove all previous routes from the stack
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => homepage()),
-            (route) => false,
-          );
-        }).catchError((error) {
-          print('Failed to store sell details: $error');
-        });
-      }).catchError((error) {
-        print('Failed to store image details: $error');
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Add Image'),
-        backgroundColor: Colors.black,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _selectedImage != null
-                ? Image.file(
-                    _selectedImage!,
-                    width: 200,
-                    height: 200,
-                  )
-                : Icon(
-                    Icons.image,
-                    size: 100,
-                    color: Colors.grey,
-                  ),
-            SizedBox(height: 16.0),
-            Text(
-              'Add Image',
-              style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: _selectImage,
-              child: Text('Choose Image'),
-            ),
-            SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: _submitImage,
-              child: Text('Submit'),
-            ),
-          ],
-        ),
       ),
     );
   }
