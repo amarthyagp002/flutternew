@@ -1,0 +1,37 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    ".flutter-plugins-dependencies": true,
+    ".flutter-plugins": true,
+    ".gitignore": true,
+    ".metadata": true,
+    "analysis_options.yaml": true,
+    "pubspec.lock": true,
+    "README.md": true,
+    ".dart_tool": true,
+    ".vscode": true,
+    "build": true,
+    "ios": true,
+    "android": true
+  },
+  "hide-files.files": [
+    ".flutter-plugins-dependencies",
+    ".flutter-plugins",
+    ".gitignore",
+    ".metadata",
+    "analysis_options.yaml",
+    "pubspec.lock",
+    "README.md",
+    ".dart_tool",
+    ".vscode",
+    "build",
+    "ios",
+    "android"
+  ],
+  "cSpell.words": ["sellcars"]
+}
