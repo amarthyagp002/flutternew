@@ -1,4 +1,4 @@
-import 'package:akary/home_page.dart';
+import 'package:akary/view/home/user/page/home_page.dart';
 import 'package:akary/staff_home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';

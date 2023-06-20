@@ -1,7 +1,5 @@
 //import 'package:car/pr1.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 //import 'pr1.dart';
 
 class First_Home extends StatefulWidget {

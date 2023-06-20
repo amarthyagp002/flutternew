@@ -1,9 +1,9 @@
 import 'dart:io';
-import 'package:akary/home_page.dart';
+import 'package:akary/view/home/user/page/home_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class CustomerProfile extends StatefulWidget {
@@ -15,15 +15,13 @@ class CustomerProfile extends StatefulWidget {
 
 class _CustomerProfileState extends State<CustomerProfile> {
   File? _image;
-  final CollectionReference _userCollection =
-      FirebaseFirestore.instance.collection('users');
 
-  TextEditingController _fullNameController = TextEditingController();
-  TextEditingController _phoneNumberController = TextEditingController();
-  TextEditingController _addressController = TextEditingController();
-  TextEditingController _stateController = TextEditingController();
-  TextEditingController _districtController = TextEditingController();
-  TextEditingController _pincodeController = TextEditingController();
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _stateController = TextEditingController();
+  final TextEditingController _districtController = TextEditingController();
+  final TextEditingController _pincodeController = TextEditingController();
 
   Future<void> _saveUserDetails() async {
     String fullName = _fullNameController.text;
@@ -74,7 +72,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                     Navigator.pop(context);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => homepage()),
+                      MaterialPageRoute(builder: (context) => const HomePage()),
                     );
                   },
                   child: const Text('OK'),
@@ -124,7 +122,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
         leading: const BackButton(
           color: Color.fromARGB(255, 255, 255, 255),
         ),
-        title: Text("Customer"),
+        title: const Text("Customer"),
         centerTitle: true,
         backgroundColor: Colors.black,
       ),
@@ -139,35 +137,36 @@ class _CustomerProfileState extends State<CustomerProfile> {
                   : Image.network(
                       'https://static.vecteezy.com/system/resources/thumbnails/009/734/564/small/default-avatar-profile-icon-of-social-media-user-vector.jpg',
                     ).image,
-              backgroundColor: Color.fromARGB(255, 255, 255, 255),
+              backgroundColor: const Color.fromARGB(255, 255, 255, 255),
               child: Align(
-                alignment: Alignment(0.2, 1.3),
+                alignment: const Alignment(0.2, 1.3),
                 child: IconButton(
                   onPressed: _pickImage,
-                  icon: Icon(Icons.camera),
+                  icon: const Icon(Icons.camera),
                 ),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             nameTextField(),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             phoneNumberTextField(),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             addressTextField(),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             stateTextField(),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             districtTextField(),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             pincodeTextField(),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             ElevatedButton(
               onPressed: _saveUserDetails,
-              child: Text('SUBMIT'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
-                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
               ),
+              child: const Text('SUBMIT'),
             ),
           ],
         ),
@@ -178,7 +177,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
   Widget nameTextField() {
     return TextFormField(
       controller: _fullNameController,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         border: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.black),
         ),
@@ -197,7 +196,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
   Widget phoneNumberTextField() {
     return TextFormField(
       controller: _phoneNumberController,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         border: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.black),
         ),
@@ -219,7 +218,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
   Widget addressTextField() {
     return TextFormField(
       controller: _addressController,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         border: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.black),
         ),
@@ -241,7 +240,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
   Widget stateTextField() {
     return TextFormField(
       controller: _stateController,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         border: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.black),
         ),
@@ -259,7 +258,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
   Widget districtTextField() {
     return TextFormField(
       controller: _districtController,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         border: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.black),
         ),
@@ -277,7 +276,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
   Widget pincodeTextField() {
     return TextFormField(
       controller: _pincodeController,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         border: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.black),
         ),
@@ -321,7 +320,9 @@ class _CustomerProfileState extends State<CustomerProfile> {
         }
       }
     } catch (e) {
-      print('Error fetching user details: $e');
+      if (kDebugMode) {
+        print('Error fetching user details: $e');
+      }
     }
   }
 }
