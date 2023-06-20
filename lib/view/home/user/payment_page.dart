@@ -672,7 +672,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               const SizedBox(
                                 width: 16,
                               ),
-                              const Column(
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
@@ -727,7 +727,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               const SizedBox(
                                 width: 16,
                               ),
-                              const Column(
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(

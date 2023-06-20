@@ -25,73 +25,149 @@ class StaffHomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: () {
-                // Navigate to the first page
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddProductPage(),
-                  ),
-                );
-              },
-              child: Container(
-                width: 200,
-                height: 100,
-                //color: Color.fromARGB(156, 68, 56, 200),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.cyan),
-                child: Center(
-                  child: Text(
-                    'Update stock',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            GestureDetector(
-              onTap: () {
-                // Navigate to the second page
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => SecondPage(),
-                //   ),
-                // );
-              },
-              child: GestureDetector(
+      body: SafeArea(
+          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+        Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (ctx) => requestscreen()));
+                  // Navigate to the first page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddProductPage(),
+                    ),
+                  );
                 },
                 child: Container(
-                  width: 200,
-                  height: 100,
-                  color: Colors.green,
-                  child: Center(
+                  width: 160,
+                  height: 160,
+                  //color: Color.fromARGB(156, 68, 56, 200),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.white),
+                  child: const Center(
                     child: Text(
-                      'Second Page',
+                      'Update stock',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+              SizedBox(width: 25),
+              // SizedBox(height: 20),
+              GestureDetector(
+                onTap: () {
+                  // Navigate to the second page
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => SecondPage(),
+                  //   ),
+                  // );
+                },
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (ctx) => requestscreen()));
+                  },
+                  child: Container(
+                    width: 160,
+                    height: 160,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.white,
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'Sell Details',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
+        Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  // Navigate to the first page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => StaffProfile(),
+                    ),
+                  );
+                },
+                child: Container(
+                  width: 160,
+                  height: 160,
+                  //color: Color.fromARGB(156, 68, 56, 200),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.white),
+                  child: const Center(
+                    child: Text(
+                      'Staff Profile',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 25),
+              // SizedBox(height: 20),
+              GestureDetector(
+                onTap: () {},
+                child: GestureDetector(
+                  onTap: () {
+                    // Navigator.push(context,
+                    //     MaterialPageRoute(builder: (ctx) => requestscreen()));
+                  },
+                  child: Container(
+                    width: 160,
+                    height: 160,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.white,
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'Sell Details',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        )
+      ])),
     );
   }
 }
