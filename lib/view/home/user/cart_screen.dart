@@ -13,8 +13,8 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  cancelBooking(String name, String price, String company) async {
-    setState(() {});
+  cancelBooking(CartItem item) async {
+    FireStoreService.removeFromCart(item).then((value) => setState(() {}));
   }
 
   @override
@@ -135,12 +135,12 @@ class _CartScreenState extends State<CartScreen> {
                                     ),
                                     IconButton(
                                         onPressed: () {
-                                          FireStoreService.removeFromCart(
-                                              item);
+                                          cancelBooking(item);
                                         },
                                         icon: const Icon(
                                           Icons.delete,
                                           color: Colors.red,
+                                          size: 30,
                                         ))
                                   ],
                                 ),
