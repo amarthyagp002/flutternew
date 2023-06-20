@@ -1,3 +1,4 @@
+import "dart:io";
 import "dart:typed_data";
 
 import "package:cloud_firestore/cloud_firestore.dart";
@@ -7,7 +8,25 @@ import "package:firebase_storage/firebase_storage.dart";
 final FirebaseStorage storage = FirebaseStorage.instance;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-class Storedata {
+class StoreData {
+  Future<String> uploadSellCarImage(Uint8List file, String image) async {
+    try {
+      Reference ref = storage.ref().child("sellcar").child("sellcarimage");
+      UploadTask uploadTask = ref.putData(file);
+      TaskSnapshot snapshot = uploadTask.snapshot;
+      if (snapshot.state == TaskState.success) {
+        print("success");
+        String downloadUrl = await snapshot.ref.getDownloadURL();
+        return downloadUrl;
+      } else {
+        print("error");
+        return "error";
+      }
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
   Future<String> uploadImage(
       {required String image,
       required String profile,

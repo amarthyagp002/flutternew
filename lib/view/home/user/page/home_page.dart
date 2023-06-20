@@ -257,8 +257,9 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const Divider(),
                   ListTile(
-                    leading: const Icon(Icons.exit_to_app),
-                    title: const Text('Logout'),
+                    leading: const Icon(Icons.exit_to_app, color: Colors.white),
+                    title: const Text('Logout',
+                        style: TextStyle(color: Colors.white)),
                     onTap: () {
                       Navigator.pop(context); // close the drawer
                       Navigator.push(

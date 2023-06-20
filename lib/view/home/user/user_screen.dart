@@ -1,4 +1,3 @@
-import 'package:akary/view/home/user/cart_screen.dart';
 import 'package:akary/view/home/user/page/home_page.dart';
 import 'package:akary/view/home/user/page/sell_page.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +13,7 @@ class _UserScreenState extends State<UserScreen> {
   int _selectedIndex = 0;
   final _screens = [
     const HomePage(),
-    SellPage(),
+    const SellPage(),
   ];
 
   @override

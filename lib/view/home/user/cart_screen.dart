@@ -135,13 +135,8 @@ class _CartScreenState extends State<CartScreen> {
                                     ),
                                     IconButton(
                                         onPressed: () {
-                                          cancelBooking(
-                                              (snapshot.data! as dynamic)
-                                                  .docs[index]['item-name'],
-                                              (snapshot.data! as dynamic)
-                                                  .docs[index]['item-price'],
-                                              (snapshot.data! as dynamic)
-                                                  .docs[index]['item-company']);
+                                          FireStoreService.removeFromCart(
+                                              item);
                                         },
                                         icon: const Icon(
                                           Icons.delete,
