@@ -101,7 +101,7 @@ class FireStoreService {
     }
   }
 
-  static void removeFromCart(CartItem item) async {
+  static Future<void> removeFromCart(CartItem item) async {
     try {
       final snapshot = await _usersCollectionReference
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -124,6 +124,7 @@ class FireStoreService {
               backgroundColor: const Color.fromARGB(255, 96, 90, 90),
               textColor: Colors.white,
               fontSize: 16.0);
+          break;
         }
       }
     } catch (e) {
