@@ -1,5 +1,10 @@
 //import 'dart:html';
 
+import 'dart:io';
+
+import 'package:akary/service/auth_service.dart';
+import 'package:akary/store.dart';
+import 'package:akary/view/home/home_screen_wrapper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -142,7 +147,7 @@ class _SellPageState extends State<SellPage> {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    saveDetails();
+                    goToNextPage();
                   },
                   child: const Text('Next'),
                 ),
@@ -152,30 +157,6 @@ class _SellPageState extends State<SellPage> {
         ),
       ),
     );
-  }
-
-  void saveDetails() async {
-    DocumentSnapshot snap = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
-    String name = (snap.data() as Map<String, dynamic>)['user-name'];
-    await FirebaseFirestore.instance
-        .collection('staff')
-        .doc('ZORJDKCdPCgR23QIDx2DSEGWokG2')
-        .collection('sellcars')
-        .doc()
-        .set({
-      'model name': _modelNameController.text,
-      'year': _yearController.text,
-      'transmission': _transmissionController.text,
-      "KM's Driven": _kilometersDrivenController.text,
-      'No.of owners': _numOfOwnersController.text,
-      'description': _descriptionController.text,
-      'price': _priceController.text,
-      'uid': FirebaseAuth.instance.currentUser!.uid,
-      'user-name': name
-    });
   }
 }
 
@@ -204,7 +185,7 @@ class AddImagePage extends StatefulWidget {
 }
 
 class _AddImagePageState extends State<AddImagePage> {
-  //File? _selectedImage;
+  File? _selectedImage;
 
   Future<void> _selectImage() async {
     final picker = ImagePicker();
@@ -212,58 +193,78 @@ class _AddImagePageState extends State<AddImagePage> {
 
     if (pickedImage != null) {
       setState(() {
-        //   _selectedImage = File(pickedImage.path);
+        _selectedImage = File(pickedImage.path);
       });
     }
   }
 
   void _submitImage() {
-    // if (_selectedImage != null) {
-    //   // Upload the image to Firebase Storage (optional)
-    //   // ...
+    Future<void> saveDetails() async {
+      final downloadURI = await StoreData().uploadSellCarImage(
+          _selectedImage!.readAsBytesSync(),
+          "${widget.modelNameController.text}-${widget.yearController.text}");
+      String name = (await AuthService.getUser())[0];
+      await FirebaseFirestore.instance
+          .collection('staff')
+          .doc('ZORJDKCdPCgR23QIDx2DSEGWokG2')
+          .collection('sellcars')
+          .doc()
+          .set({
+        'model name': widget.modelNameController.text,
+        'year': widget.yearController.text,
+        'transmission': widget.transmissionController.text,
+        "KM's Driven": widget.kilometersDrivenController.text,
+        'No.of owners': widget.numOfOwnersController.text,
+        'description': widget.descriptionController.text,
+        'price': widget.priceController.text,
+        'uid': FirebaseAuth.instance.currentUser!.uid,
+        'user-name': name,
+        'image': downloadURI,
+      });
+    }
 
-    //   // Store the image details in the Firebase database
-    //   FirebaseFirestore.instance.collection('images').add({
-    //     //'path': _selectedImage!.path,
-    //     // Add more fields as needed (e.g., image URL, timestamp, etc.)
-    //   }).then((value) {
-    //     print('Image details stored successfully');
+    if (_selectedImage != null) {
+      // Upload the image to Firebase Storage (optional)
+      // ...
 
-    //     // Access the user details passed from SellPage
-    //     var modelName = widget.modelNameController.text;
-    //     var year = widget.yearController.text;
-    //     var transmission = widget.transmissionController.text;
-    //     var kilometersDriven = widget.kilometersDrivenController.text;
-    //     var numOfOwners = widget.numOfOwnersController.text;
-    //     var description = widget.descriptionController.text;
-    //     var price = widget.priceController.text; // Get price value
+      saveDetails().then((value) {
+        // Access the user details passed from SellPage
+        var modelName = widget.modelNameController.text;
+        var year = widget.yearController.text;
+        var transmission = widget.transmissionController.text;
+        var kilometersDriven = widget.kilometersDrivenController.text;
+        var numOfOwners = widget.numOfOwnersController.text;
+        var description = widget.descriptionController.text;
+        var price = widget.priceController.text; // Get price value
 
-    //     // Store additional details from SellPage in a separate collection
-    //     FirebaseFirestore.instance.collection('sellDetails').add({
-    //       'modelName': modelName,
-    //       'year': year,
-    //       'transmission': transmission,
-    //       'kilometersDriven': kilometersDriven,
-    //       'numOfOwners': numOfOwners,
-    //       'description': description,
-    //       'price': price, // Store price value
-    //       // Add more fields as needed
-    //     }).then((value) {
-    //       print('Sell details stored successfully');
+        // Store additional details from SellPage in a separate collection
+        FirebaseFirestore.instance.collection('sellDetails').add({
+          'modelName': modelName,
+          'year': year,
+          'transmission': transmission,
+          'kilometersDriven': kilometersDriven,
+          'numOfOwners': numOfOwners,
+          'description': description,
+          'price': price, // Store price value
+          // Add more fields as needed
+        }).then((value) {
+          print('Sell details stored successfully');
 
-    //       // Navigate to the homepage and remove all previous routes from the stack
-    //       Navigator.pushAndRemoveUntil(
-    //         context,
-    //         MaterialPageRoute(builder: (context) => homepage()),
-    //         (route) => false,
-    //       );
-    //     }).catchError((error) {
-    //       print('Failed to store sell details: $error');
-    //     });
-    //   }).catchError((error) {
-    //     print('Failed to store image details: $error');
-    //   });
-    // }
+          // Navigate to the homepage and remove all previous routes from the stack
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomeScreenWrapper(role: "USER"),
+            ),
+            (route) => false,
+          );
+        }).catchError((error) {
+          print('Failed to store sell details: $error');
+        });
+      }).catchError((error) {
+        print('Failed to store image details: $error');
+      });
+    }
   }
 
   @override
@@ -277,17 +278,17 @@ class _AddImagePageState extends State<AddImagePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // _selectedImage != null
-            //     ? Image.file(
-            //         _selectedImage!,
-            //         width: 200,
-            //         height: 200,
-            //       )
-            //     : Icon(
-            //         Icons.image,
-            //         size: 100,
-            //         color: Colors.grey,
-            //       ),
+            _selectedImage != null
+                ? Image.file(
+                    _selectedImage!,
+                    width: 200,
+                    height: 200,
+                  )
+                : const Icon(
+                    Icons.image,
+                    size: 100,
+                    color: Colors.grey,
+                  ),
             const SizedBox(height: 16.0),
             const Text(
               'Add Image',

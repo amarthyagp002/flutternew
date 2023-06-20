@@ -35,7 +35,7 @@ class _AddProductPageState extends State<AddProductPage> {
   }
 
   void saveprofile() async {
-    String resp = await Storedata().addImage(
+    String resp = await StoreData().addImage(
         image: partnamecontroller.text.trim(),
         profile: companycontroller.text.trim(),
         description: desccontroller.text.trim(),
