@@ -101,7 +101,7 @@ class FireStoreService {
     }
   }
 
-  void removeFromCart(CartItem item) async {
+  static void removeFromCart(CartItem item) async {
     try {
       final snapshot = await _usersCollectionReference
           .doc(FirebaseAuth.instance.currentUser!.uid)
